@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log/slog"
-	"mailnull/api/internal/config"
+	"mailnull/internal/config"
 	"math/rand"
 	"net"
 	"net/textproto"

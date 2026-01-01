@@ -1,10 +1,10 @@
 package main
 
 import (
-	"mailnull/api/handlers"
-	"mailnull/api/internal/config"
-	"mailnull/api/internal/logger"
-	"mailnull/api/internal/verifier"
+	"mailnull/handlers"
+	"mailnull/internal/config"
+	"mailnull/internal/logger"
+	"mailnull/internal/verifier"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

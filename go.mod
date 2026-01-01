@@ -1,4 +1,4 @@
-module mailnull/api
+module mailnull
 
 go 1.25.4
 

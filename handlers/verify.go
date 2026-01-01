@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"mailnull/api/internal/verifier"
+	"mailnull/internal/verifier"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
