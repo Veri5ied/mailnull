@@ -1,4 +1,4 @@
-# MailNull API
+# MailNull
 
 A high-performance, concurrent email verification engine built with Go. Provides deep email validation through syntax checking, disposable domain detection, DNS verification, and SMTP handshake validation.
 
@@ -216,12 +216,19 @@ Environment variables:
 ```
 mailnull/
 ├── main.go              # Application entry point
+├── handlers/            # HTTP request handlers
+│   └── verify.go        # Email verification endpoint handler
 ├── internal/            # Internal packages
-│   ├── handlers/        # HTTP request handlers
-│   ├── services/        # Business logic
-│   ├── models/          # Data structures
-│   └── logger/          # Logging configuration
-└── go.mod              # Go module dependencies
+│   ├── config/          # Configuration management
+│   │   └── config.go
+│   ├── logger/          # Logging configuration
+│   │   └── logger.go
+│   └── verifier/        # Email verification engine
+│       ├── types.go     # Data structures and models
+│       ├── verifier.go  # Core verification logic
+│       └── worker.go    # Worker pool implementation
+├── go.mod               # Go module dependencies
+└── go.sum               # Dependency checksums
 ```
 
 ## Performance
