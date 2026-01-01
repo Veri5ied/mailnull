@@ -1,15 +1,15 @@
-# MailNull
+# MailNull API
 
-A high-performance, concurrent email verification engine built with Go and Next.js. Provides deep email validation through syntax checking, disposable domain detection, DNS verification, and SMTP handshake validation.
+A high-performance, concurrent email verification engine built with Go. Provides deep email validation through syntax checking, disposable domain detection, DNS verification, and SMTP handshake validation.
 
 ## Architecture
 
-This is a Turborepo monorepo containing:
+MailNull is a Go/Gin backend service featuring:
 
-- `apps/api` - Go/Gin backend email verification service
-- `apps/web` - Next.js frontend interface
-- Concurrent worker pool architecture for batch processing
+- Concurrent worker pool architecture for batch email processing
 - Multi-layer verification pipeline
+- Three operating modes (LIVE, LITE, MOCK) for different deployment scenarios
+- RESTful API with JSON responses
 
 ## Email Verification Pipeline
 
@@ -28,7 +28,6 @@ The engine performs verification in multiple stages:
 Full verification including SMTP handshake. Requires Port 25 access.
 
 ```bash
-cd apps/api
 go run main.go
 ```
 
@@ -37,7 +36,6 @@ go run main.go
 Syntax + DNS validation only. Use when Port 25 is blocked by ISP/firewall.
 
 ```bash
-cd apps/api
 MODE=LITE go run main.go
 ```
 
@@ -46,7 +44,6 @@ MODE=LITE go run main.go
 Returns deterministic mock data. No network calls.
 
 ```bash
-cd apps/api
 MODE=MOCK go run main.go
 ```
 
@@ -117,6 +114,10 @@ curl -X POST http://localhost:8080/v1/mailnull/verify \
 
 Service health check.
 
+```bash
+curl http://localhost:8080/health
+```
+
 ## Deliverability Status
 
 - **DELIVERABLE** - Email passed all verification stages
@@ -133,32 +134,55 @@ Weighted scoring based on verification stages:
 - SMTP RCPT success: 50%
 - Non-disposable domain: 20%
 
-## Development
+## Getting Started
 
-**Install Dependencies:**
+### Prerequisites
+
+- Go 1.25 or higher
+- Access to Port 25 (for LIVE mode SMTP verification)
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-pnpm install
+git clone <repository-url>
+cd mailnull
 ```
 
-**Run All Services:**
+2. Install Go dependencies:
 
 ```bash
-npm run dev
+go mod download
 ```
 
-**Run API Only:**
+3. Run the service:
 
 ```bash
-cd apps/api
 go run main.go
 ```
 
-**Run Frontend Only:**
+The API server will start on `http://localhost:8080` by default.
+
+## Development
+
+### Running the Server
 
 ```bash
-cd apps/web
-npm run dev
+go run main.go
+```
+
+### Building for Production
+
+```bash
+go build -o mailnull main.go
+./mailnull
+```
+
+### Testing
+
+```bash
+go test ./...
 ```
 
 ## Port 25 Requirement
@@ -169,7 +193,7 @@ Full SMTP verification requires outbound Port 25 access. This port is commonly b
 - Cloud providers (AWS, GCP, Azure by default)
 - Corporate firewalls
 
-**For Local Development:** Use LITE mode
+**For Local Development:** Use LITE mode  
 **For Production:** Deploy to VPS with Port 25 access (DigitalOcean, Linode, Vultr, Hetzner)
 
 ## Configuration
@@ -182,20 +206,27 @@ Environment variables:
 
 ## Technology Stack
 
-**Backend:**
+- **Go 1.25+** - Primary language
+- **Gin** - Web framework for HTTP routing and middleware
+- **Standard Library** - net/smtp, log/slog for core functionality
+- **Worker Pool** - Concurrent batch processing pattern
 
-- Go 1.25+
-- Gin web framework
-- Standard library (net, slog)
-- Worker pool concurrency pattern
+## Project Structure
 
-**Frontend:**
+```
+mailnull/
+├── main.go              # Application entry point
+├── internal/            # Internal packages
+│   ├── handlers/        # HTTP request handlers
+│   ├── services/        # Business logic
+│   ├── models/          # Data structures
+│   └── logger/          # Logging configuration
+└── go.mod              # Go module dependencies
+```
 
-- Next.js 16
-- TypeScript
-- TailwindCSS
+## Performance
 
-**Infrastructure:**
-
-- Turborepo monorepo
-- CORS enabled for localhost:3000
+- Concurrent worker pool handles batch requests efficiently
+- Non-blocking I/O for SMTP connections
+- Configurable timeout settings
+- Optimized for high-throughput email verification
